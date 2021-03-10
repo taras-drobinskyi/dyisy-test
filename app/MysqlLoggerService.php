@@ -8,11 +8,11 @@ class MysqlLoggerService implements Logger
         $this->db = new PDO(DB_TYPE . ':host=' . DB_HOST . ':' . DB_PORT . ';dbname=' . DB_NAME . "; charset=" . DB_CHARSET, DB_USER, DB_PASS);
     }
 
-    public function log(string $buttonId, string $ip):array {
+    public function log(string $buttonId, string $ip): array {
         $success = false;
         $result = '';
-
-        $sql = $this->db->prepare('CREATE TABLE IF NOT EXISTS log (
+        try {
+            $sql = $this->db->prepare('CREATE TABLE IF NOT EXISTS log (
                     id BIGINT(20) NOT NULL AUTO_INCREMENT,
                     ip varchar(255),
                     button_id varchar(255),
@@ -23,25 +23,14 @@ class MysqlLoggerService implements Logger
                 VALUES (:ip, :button_id)
                 ');
 
-        $sql->bindParam('ip', $ip);
-        $sql->bindParam('button_id', $buttonId);
+            $sql->bindParam('ip', $ip);
+            $sql->bindParam('button_id', $buttonId);
 
-        try {
-            $this->db->query('CREATE TABLE IF NOT EXISTS log (
-                    id BIGINT(20) NOT NULL AUTO_INCREMENT,
-                    ip varchar(255),
-                    button_id varchar(255),
-                    date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                    PRIMARY KEY (id)
-                );');
             $success = $sql->execute();
         } catch (\Exception $e) {
             $result = $e->getMessage();
         }
 
-        return [
-            'success' => $success,
-            'result' => $result
-        ];
+        return ['success' => $success, 'result' => $result];
     }
 }
