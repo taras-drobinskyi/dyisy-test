@@ -11,8 +11,10 @@ $(document).ready(function () {
                id: btnId
            },
            success: function (response) {
-
-                console.log('sd')
+                console.log(JSON.stringify(response))
+           },
+           error: function (error) {
+                console.log(JSON.stringify(error))
            }
        });
    })

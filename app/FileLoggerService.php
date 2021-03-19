@@ -19,6 +19,7 @@ class FileLoggerService implements Logger
             }
 
             $result = file_put_contents('./log/' . date("Y-m-d") . '-click.log', $log, FILE_APPEND);
+            $success = true;
         } catch (Exception $e) {
             $result = $e->getMessage();
         }

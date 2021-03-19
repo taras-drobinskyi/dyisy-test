@@ -10,6 +10,9 @@ $remoteIp = $_SERVER['REMOTE_ADDR'];
 $dbLogger = new MysqlLoggerService();
 $fileLogger = new FileLoggerService();
 
+$dbLogResult = false;
+$fileLogResult = false;
+
 if (isset($postFields['id']) && !is_null($remoteIp)) {
 
     $dbLogResult = $dbLogger->log($postFields['id'], $remoteIp);
